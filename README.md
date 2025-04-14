@@ -66,3 +66,8 @@ The system processes vehicle-related images and annotations to create occlusion-
 
 - **VisDrone - YOLO v11x - Vehicle Detection:**
 ![Screenshot 2025-03-24 141550](https://github.com/user-attachments/assets/ff5b83d6-c59e-41de-9ae5-b07ad49714c8)
+
+## Model Demo
+<p align="center">
+  <img src="./assets/demo.gif" alt="Demo" width="800" height="450">
+</p>
