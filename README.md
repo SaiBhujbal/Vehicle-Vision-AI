@@ -77,199 +77,202 @@ The system processes vehicle-related images and annotations to create occlusion-
 </p>
 
 ## How to Run:
-Below is a simplified, step-by-step guide to help you download, set up and deploy the Vehicle-Vision-AI project (with its detection and tracking features) on your own domain in a production environment.
 
 ---
 
 ### 1. Clone the Repository and Install Dependencies
 
 #### a. Clone the GitHub Repository
+
 Open your terminal and run:
 
-bash
+```bash
 git clone https://github.com/saharshmehrotra/Vehicle-Vision-AI.git
-
-
-Then, change into the project folder:
-
-bash
 cd Vehicle-Vision-AI
-
+```
 
 #### b. Install Node.js Dependencies
-The project uses Next.js for its frontend. Make sure you have Node.js installed (preferably the latest LTS version). Then, install dependencies using either npm or pnpm:
 
-bash
+Ensure you have the latest LTS version of **Node.js** installed. Then install the frontend dependencies:
+
+```bash
 npm install
+```
 
-
-Note: If you prefer pnpm and the project includes a pnpm-lock.yaml, you can run pnpm install instead.
+> 💡 If the project includes a `pnpm-lock.yaml` file and you prefer `pnpm`, you can run:
+```bash
+pnpm install
+```
 
 #### c. (Optional) Set Up Python Environment for ML Features
-If the detection and tracking logic runs via Python scripts or Jupyter notebooks, set up a Python 3 environment. Install packages such as Ultralytics (for YOLO), OpenCV, etc.:
 
-bash
+If the project includes Python scripts or Jupyter notebooks for detection/tracking:
+
+1. Ensure Python 3 is installed.
+2. Create a virtual environment (optional but recommended).
+3. Install the required packages:
+
+```bash
 pip install ultralytics opencv-python
-
-
-This step ensures you have all the libraries needed for running the vehicle detection and tracking models.
+```
 
 ---
 
 ### 2. Test the Project Locally
 
 #### a. Run the Next.js Development Server
-To see the project in action locally, start the development server:
 
-bash
+To start the development server:
+
+```bash
 npm run dev
+```
 
+Open your browser and visit: [http://localhost:3000](http://localhost:3000)
 
-Now open your web browser and go to [http://localhost:3000](http://localhost:3000) to view the site.
+#### b. Try Out Detection and Tracking Features
 
-#### b. Try Out Detection and Tracking
-- User Interface: Look for buttons or upload options that allow you to feed an image or video into the app.
-- Notebooks: If no direct demo is available in the UI, check the provided Jupyter notebooks (e.g., in the YOLO Testing folder) to run example detection/tracking tests.
-
-When the detection and tracking features are confirmed working locally, you’re ready for production deployment.
+- Use the web interface to upload images or videos.
+- Alternatively, check the `YOLO Testing` folder for Python notebooks to manually test detection and tracking.
 
 ---
 
 ### 3. Prepare for Production Deployment
 
 #### a. Build the Application
-For production, first build your Next.js app:
 
-bash
+For a production build:
+
+```bash
 npm run build
-
-
-Once the build is complete, start the production server with:
-
-bash
 npm start
+```
 
+> By default, the app runs on port **3000**.
 
-This command runs the built application, typically on port 3000.
+#### b. Configure Environment Variables (if needed)
 
-#### b. Environment Variables and Configurations
-- Create a .env file (if needed) for production settings.
-- Ensure that any paths for model weights or API keys are set correctly.
+- Create a `.env` file.
+- Add necessary API keys or model paths.
 
 ---
 
-### 4. Deploying on a Cloud Server with a Custom Domain
+### 4. Deploy on a Cloud Server with a Custom Domain
 
-#### a. Set Up a Server (e.g., AWS EC2 or DigitalOcean)
-1. Provision a VM: Choose an Ubuntu server or similar.
-2. SSH into your server:  
-   bash
-   ssh -i /path/to/your-key.pem ubuntu@YOUR_SERVER_IP
-   
+#### a. Set Up a Cloud Server
 
-#### b. Install Required Software on the Server
-1. Update and Install Node.js, Git, and Nginx:
+Provision a VM (e.g., AWS EC2, DigitalOcean) with Ubuntu. Then SSH into it:
 
-   bash
-   sudo apt update && sudo apt upgrade -y
-   sudo apt install -y nodejs npm git nginx
-   
+```bash
+ssh -i /path/to/your-key.pem ubuntu@YOUR_SERVER_IP
+```
 
-2. Install PM2:
-   
-   PM2 is a process manager that will ensure your app keeps running.
-   
-   bash
-   sudo npm install -g pm2
-   
+#### b. Install Required Software
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y nodejs npm git nginx
+sudo npm install -g pm2
+```
 
 #### c. Clone and Build the Project on the Server
-1. Clone the repository:
-   
-   bash
-   git clone https://github.com/saharshmehrotra/Vehicle-Vision-AI.git
-   cd Vehicle-Vision-AI
-   npm install
-   npm run build
-   
 
-2. Start the App with PM2:
-   
-   bash
-   pm2 start npm --name "vehicle-vision-ai" -- start
-   pm2 save
-   pm2 startup
-   
+```bash
+git clone https://github.com/saharshmehrotra/Vehicle-Vision-AI.git
+cd Vehicle-Vision-AI
+npm install
+npm run build
+```
 
-This will run your application on port 3000 in the background.
+Start the app with PM2:
 
-#### d. Set Up Your Domain and HTTPS with Nginx
+```bash
+pm2 start npm --name "vehicle-vision-ai" -- start
+pm2 save
+pm2 startup
+```
 
-1. Point Your Domain to Your Server:
-   - In your domain registrar’s DNS settings, add an A record pointing your domain (e.g., myvehicleapp.com) to your server’s public IP.
-  
-2. Configure Nginx as a Reverse Proxy:
-   - Create a new configuration file:
+#### d. Configure Nginx and Set Up a Domain
 
-     bash
-     sudo nano /etc/nginx/sites-available/vehicle-vision-ai.conf
-     
+##### 1. Point Your Domain
 
-   - Paste the following content (replace myvehicleapp.com with your domain):
+Add an **A record** in your domain registrar’s DNS, pointing `myvehicleapp.com` to your server's public IP.
 
-     nginx
-     server {
-         listen 80;
-         server_name myvehicleapp.com www.myvehicleapp.com;
+##### 2. Set Up Nginx Reverse Proxy
 
-         location / {
-             proxy_pass http://localhost:3000;
-             proxy_http_version 1.1;
-             proxy_set_header Upgrade $http_upgrade;
-             proxy_set_header Connection 'upgrade';
-             proxy_set_header Host $host;
-             proxy_cache_bypass $http_upgrade;
-         }
-     }
-     
+Create a config file:
 
-   - Save the file and enable the config:
+```bash
+sudo nano /etc/nginx/sites-available/vehicle-vision-ai.conf
+```
 
-     bash
-     sudo ln -s /etc/nginx/sites-available/vehicle-vision-ai.conf /etc/nginx/sites-enabled/
-     sudo nginx -t
-     sudo systemctl restart nginx
-     
+Paste the following (replace `myvehicleapp.com`):
 
-3. Enable HTTPS with Let’s Encrypt:
-   - Install Certbot for Nginx:
+```nginx
+server {
+    listen 80;
+    server_name myvehicleapp.com www.myvehicleapp.com;
 
-     bash
-     sudo apt install -y certbot python3-certbot-nginx
-     
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
 
-   - Run Certbot to obtain and configure your SSL certificate:
+Enable the config:
 
-     bash
-     sudo certbot --nginx -d myvehicleapp.com -d www.myvehicleapp.com
-     
+```bash
+sudo ln -s /etc/nginx/sites-available/vehicle-vision-ai.conf /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
 
-   Follow the prompts to complete installation. Once finished, your site should be accessible via HTTPS at [https://myvehicleapp.com](https://myvehicleapp.com).
+##### 3. Secure with HTTPS (Let’s Encrypt)
+
+Install Certbot:
+
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+```
+
+Run the SSL setup:
+
+```bash
+sudo certbot --nginx -d myvehicleapp.com -d www.myvehicleapp.com
+```
+
+Visit [https://myvehicleapp.com](https://myvehicleapp.com) to confirm HTTPS is active.
 
 ---
 
 ### 5. Final Production Best Practices
 
-- Process Management:  
-  PM2 ensures your app stays running and restarts on server reboots. Review PM2 logs if issues arise.
+- **Process Management**  
+  PM2 keeps your app running and restarts it after reboots. Use `pm2 logs` to debug.
 
-- Security:  
-  Use a firewall (e.g., UFW) to close all unnecessary ports. Allow only HTTP/HTTPS (ports 80 and 443) and SSH (port 22).
+- **Security**  
+  Use `ufw` to allow only necessary ports (e.g., 22, 80, 443):
 
-- Performance:  
-  Monitor CPU/memory usage especially if your detection/tracking uses heavy ML models. If needed, consider GPU-based instances or a lighter model version.
+  ```bash
+  sudo ufw allow OpenSSH
+  sudo ufw allow 'Nginx Full'
+  sudo ufw enable
+  ```
 
-- Regular Updates:  
-  Keep your system and dependencies updated. Let’s Encrypt certificates renew automatically, but verify they update as needed.
+- **Performance Monitoring**  
+  Watch CPU/memory usage. Consider using lighter models or GPU instances for better performance.
+
+- **Regular Maintenance**  
+  Keep system packages, Node.js, and dependencies up to date. Certbot will auto-renew SSL, but verify periodically:
+
+  ```bash
+  sudo certbot renew --dry-run
+  ```
 
 ---
+
