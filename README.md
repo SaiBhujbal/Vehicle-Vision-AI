@@ -1,10 +1,12 @@
-![Web Demo](./assets/web.gif)
-
 # Vehicle-Vision-AI
 
 ## Overview
 
 This project focuses on enhancing real-time aerial vehicle detection under occlusion using advanced deep learning techniques and multi-stage computer vision processing. The system aims to improve robustness and accuracy in detecting and classifying vehicles (cars, buses, trucks, and vans) across multiple aerial datasets, particularly in environments where occlusions, varying viewpoints, and complex backgrounds pose challenges.
+
+<p align="center">
+  <img src="./assets/web.gif" alt="Website" width="1000">
+</p>
 
 ## Problem Statement
 
