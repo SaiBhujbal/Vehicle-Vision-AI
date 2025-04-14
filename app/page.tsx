@@ -21,8 +21,8 @@ export default function HomePage() {
           </div>
 
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors">
-              Dashboard
+            <Link href="/documentation" className="text-gray-300 hover:text-white transition-colors">
+              Documentation
             </Link>
             <Link href="/pricing" className="text-gray-300 hover:text-white transition-colors">
               Pricing
