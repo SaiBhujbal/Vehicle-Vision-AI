@@ -1,4 +1,4 @@
-![Web Demo](./asset/web.gif)
+![Web Demo](./assets/web.gif)
 
 # Vehicle-Vision-AI
 
